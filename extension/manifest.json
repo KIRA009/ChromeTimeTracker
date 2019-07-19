@@ -1,0 +1,29 @@
+{
+    "name": "Chrome Session Tracker",
+    "author": "99Kira",
+    "version": "0.1",
+    "manifest_version": 2,
+    "description": "Keep track of your sessions in Chrome",
+    "permissions": [
+        "tabs"
+    ], 
+    "browser_action": {
+        "default_title": "Chrome Session Tracker",
+        "default_popup": "popup.html"
+    },
+    "background": {
+        "page": "background.html",
+        "persistent": false
+    },
+    "commands": {
+        "start_session": {
+            "suggested_key": {
+                "windows": "Ctrl+Shift+Y",
+                "mac": "Command+Shift+Y",
+                "chromeos": "Ctrl+Shift+U",
+                "linux": "Ctrl+Shift+J"
+            },
+            "description": "Start a session"
+        }
+    }
+}

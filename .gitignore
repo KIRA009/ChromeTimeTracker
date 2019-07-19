@@ -1,0 +1,21 @@
+# dependencies
+node_modules
+.pnp
+.pnp.js
+Scripts/
+Include/
+tcl/
+Lib/
+.idea/
+__pycache__/
+LICENSE.txt
+
+
+
+# testing
+coverage
+*.db
+
+# production
+build
+.env
