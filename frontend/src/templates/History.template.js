@@ -1,10 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import clsx from 'clsx';
-
 import { makeStyles } from '@material-ui/core/styles';
-import { 
-    CssBaseline,
- } from '@material-ui/core/'
+import { CssBaseline } from '@material-ui/core/'
 
 import {
     Sidebar, Appbar, Sessionbar
@@ -39,7 +36,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function HistoryTemplate(props) {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const classes = useStyles();
     return (
         <div>
@@ -50,10 +47,11 @@ export default function HistoryTemplate(props) {
             className={clsx(classes.content, {
             [classes.contentShift]: open,
             })}
-            >   <div className={classes.drawerHeader}>
+            >
+                <div className={classes.drawerHeader}>
                 {
-                    props.sessions.map((item, key) => (
-                        <Sessionbar session={item} key={key}/>
+                    props.sessions.map((item, index) => (
+                        <Sessionbar session={item} key={index} rerender={props.rerender}/>
                     ))
                 }
                 </div>

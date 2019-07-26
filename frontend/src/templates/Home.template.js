@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
     CssBaseline,
-    Paper
+    Paper,
 } from '@material-ui/core/'
 
 import Sidebar from '../components/Sidebar'
@@ -35,7 +35,6 @@ const useStyles = makeStyles(theme => ({
         ...theme.mixins.toolbar,
     },
     canvas: {
-        minWidth: `70%`,
         marginTop: 90,
         marginLeft: `auto`,
         marginRight: `auto`

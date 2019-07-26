@@ -10,7 +10,8 @@ const getToken = () => JSON.parse(window.localStorage.getItem('Token')) || ''
 const requests = {
     'auth': false,
     setToken: resp => window.localStorage.setItem('Token', JSON.stringify(resp.headers.token)),
-    get: url =>  axios.get(`${url}`, {
+    get: (url, params=null) =>  axios.get(`${url}`, {
+        params: params,
         headers: {
             'Token': getToken()
         }

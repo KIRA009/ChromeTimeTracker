@@ -39,7 +39,7 @@ export default function Sidebar(props) {
             name: 'Home'
         },
         {
-            url: '',
+            url: urls.account.url,
             name: 'Account'
         },
         {

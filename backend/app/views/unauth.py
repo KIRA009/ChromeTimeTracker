@@ -4,7 +4,7 @@ from flask_cors import CORS
 
 from app.helpers import error_response
 from app.response_modifiers import route
-from app.models import User
+from app.models import User,Setting
 
 api = Blueprint('unauth', __name__)
 api.route = types.MethodType(route, api)
@@ -20,6 +20,7 @@ CORS(api, resources='*', expose_headers=['Token'])
 def create_user():
 	user = User(request.json)
 	if user.create():
+		Setting.create(user.username)
 		return dict()
 	else:
 		return error_response('User with this email or number already exists', 409)

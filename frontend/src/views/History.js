@@ -7,9 +7,9 @@ requests.auth = true;
 
 export default class History extends Component {
     state = {
-        sessions: []
+        sessions: [],
     }
-    componentDidMount() {
+    get_sessions = () => {
         requests.get('/get-sessions/')
         .then(resp => {
             this.setState({
@@ -22,10 +22,12 @@ export default class History extends Component {
             requests.redirect();
         })
     }
-    
+    componentDidMount = () => this.get_sessions()
+    rerender = () => this.get_sessions()
+
     render() {
         return (
-            <HistoryTemplate sessions={this.state.sessions}/>
+            <HistoryTemplate sessions={this.state.sessions} rerender={this.rerender}/>
         )
     }
 }

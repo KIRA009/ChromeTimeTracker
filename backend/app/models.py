@@ -14,6 +14,7 @@ class User(db.Model):
 	email = db.Column(db.String(128), unique=True)
 	password = db.Column(db.String(256))
 	sessions = db.relationship('Session', backref='user', lazy=True)
+	settings = db.relationship('Setting', backref='user', lazy=True, uselist=False)
 
 	def __init__(self, data):
 		data['password'] = generate_password_hash(data['password'])
@@ -92,7 +93,7 @@ class Session(db.Model):
 			print(e)
 
 	def detail(self):
-		data = data = self.__dict__.copy()
+		data = self.__dict__.copy()
 		del data['_sa_instance_state']
 		data['domains'] = [domain.detail() for domain in self.domains]
 		return data
@@ -124,3 +125,60 @@ class Domain(db.Model):
 		data = self.__dict__.copy()
 		del data['_sa_instance_state']
 		return data
+
+	@staticmethod
+	def delete(domain_id):
+		domain = Domain.query.filter_by(id=domain_id).first()
+		if domain:
+			db.session.delete(domain)
+			db.session.commit()
+
+
+class Setting(db.Model):
+	user_id = db.Column(db.String(128), db.ForeignKey('user.username'), primary_key=True)
+	min_time = db.Column(db.Integer, default=0)
+	blocked_sites = db.Column(db.Text, default='')
+
+	@staticmethod
+	def create(username):
+		setting = Setting(username)
+		db.session.add(setting)
+		db.session.commit()
+
+	def detail(self):
+		data = self.__dict__.copy()
+		del data['_sa_instance_state']
+		del data['user_id']
+		data['user'] = self.user.detail()
+		data['blocked_sites'] = data['blocked_sites'].split(os.getenv('TOKEN_DECODER_SPLITTER')) \
+			if self.blocked_sites != '' else []
+		return data
+
+	def update(self, min_time=None, new_site=None):
+		if min_time:
+			self.min_time = min_time
+		if new_site:
+			blocked_sites = self.blocked_sites.split(os.getenv("TOKEN_DECODER_SPLITTER"))
+			if blocked_sites == ['']:
+				blocked_sites = []
+			if new_site not in blocked_sites:
+				blocked_sites.append(new_site)
+			print(blocked_sites)
+			self.blocked_sites = os.getenv("TOKEN_DECODER_SPLITTER").join(blocked_sites)
+		db.session.commit()
+
+	def unblock_sites(self, sites):
+		blocked_sites = self.blocked_sites.split(os.getenv("TOKEN_DECODER_SPLITTER"))
+		for site in sites:
+			if site in blocked_sites:
+				blocked_sites.remove(site)
+		self.blocked_sites = os.getenv('TOKEN_DECODER_SPLITTER').join(blocked_sites) if blocked_sites != '' else []
+		db.session.commit()
+
+	def set_mintime(self, min_time):
+		if isinstance(min_time, int):
+			self.min_time = min_time
+			db.session.commit()
+			return True, ''
+		return False, 'Min Time must be an integer'
+

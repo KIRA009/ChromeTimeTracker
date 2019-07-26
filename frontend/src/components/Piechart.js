@@ -1,47 +1,55 @@
-import React, { useRef } from 'react';
+import React, { Component } from 'react'
+import {Grid} from '@material-ui/core'
+import Statusbars from './Statusbars'
 
-const getRandomColor = () => {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-
-const draw_pie_chart = (ctx, data, total_time) => {
-    let rem_time = total_time;
-    const cx = 150, cy = 150, rad = 100;
-    let over = false;
-    for (var index in data) {
-        let domain_name = data[index][0];
-        let time = data[index][1]
-        let rem_perc = rem_time / total_time;
-        let color = getRandomColor();
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        if (rem_perc <= 0.1)
-            over = true;
-        ctx.arc(cx, cy, rad, 0, 2 * Math.PI * rem_perc);
-        ctx.lineTo(cx, cy)
-        ctx.fillStyle = color;
-        ctx.fill();
-        ctx.closePath();
-        rem_time -= time;
-        if (over)
-            break
+const cx = 250, cy = 250, rad = 200;
+const get_rad = deg => 2 * Math.PI * deg;
+const styles = {
+    statusbars: {
+        padding: 30
     }
 }
 
-export default function Piechart(props) {
-    const canvas = useRef(null);
-    if (canvas.current !== null) {
-        const ctx = canvas.current.getContext('2d');
-        canvas.current.width = canvas.current.height = 300;
-        const total_time = props.state.total_time;
-        draw_pie_chart(ctx, props.state.domains, total_time)
+export default class Piechart extends Component {
+    draw_pie_chart = (ctx, data, total_time) => {
+        let colors = this.props.state.colors;
+        let rem_time = total_time;
+        let over = false;
+        for (var index in data) {
+            let time = data[index][1][1]
+            let rem_perc = rem_time / total_time;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            if (rem_perc <= 0.1)
+                over = true;
+            ctx.arc(cx, cy, rad, 0, get_rad(rem_perc));
+            ctx.lineTo(cx, cy)
+            ctx.fillStyle = colors[index];
+            ctx.fill();
+            ctx.closePath();
+            rem_time -= time;
+            if (over) {
+                break;
+            }
+        }
     }
-    return (
-        <canvas ref={canvas}></canvas>
-    )
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const ctx = this.refs.canvas.getContext('2d');
+        this.refs.canvas.width = this.refs.canvas.height = 500;
+        const total_time = this.props.state.total_time;
+        this.draw_pie_chart(ctx, this.props.state.domains, total_time)
+    }
+    
+    render() {
+        return (
+            <Grid container>
+                <Grid item xs={12} sm>
+                    <canvas ref='canvas'></canvas>
+                </Grid>
+                <Grid item xs={12} sm style={styles.statusbars}>
+                    <Statusbars domains={this.props.state.domains} colors={this.props.state.colors}/>
+                </Grid>
+            </Grid>
+        )
+    }
 }
