@@ -110,10 +110,16 @@ class Domain(db.Model):
 	time = db.Column(db.Float())
 
 	def __init__(self, data):
+		settings = Session.query.filter_by(id=data['session_id']).first().user.settings
 		data['id'] = str(uuid.uuid4())
 		data['start_time'] = cvt_date(data['start_time'])
 		data['end_time'] = cvt_date(data['end_time'])
 		data['time'] = (data['end_time'] - data['start_time']).seconds
+		blocked_sites = settings.blocked_sites.split(os.getenv('TOKEN_DECODER_SPLITTER')) if settings.blocked_sites != '' \
+			else []
+		if data['time'] < settings.min_time or any(data['url'].startswith(i) for i in blocked_sites):
+			print(blocked_sites)
+			return
 		super().__init__(**data)
 		try:
 			db.session.add(self)

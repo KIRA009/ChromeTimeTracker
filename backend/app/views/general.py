@@ -1,6 +1,7 @@
 from flask import Flask, Blueprint, request
 from flask_cors import CORS
 import json
+import os
 
 from app.models import User, Session, Domain
 
@@ -13,10 +14,10 @@ def save_session():
 	data = request.form
 	sessions = json.loads(data['sessions'])
 	token = data.get('token')
-	print(token)
 	user = User.check_auth_token(token)
 	if next(user):
 		user = next(user)
+		settings = User.get(username=user)
 		for session in sessions:
 			Session(dict(username=user, id=session['id'], start_time=session['start'], end_time=session['end']))
 			for _, tab_info in session['tab_manager']['tabs'].items():

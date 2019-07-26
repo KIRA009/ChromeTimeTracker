@@ -27,7 +27,6 @@ const useStyles = makeStyles(theme => ({
         marginLeft: drawerWidth,
     },
     drawerHeader: {
-        display: 'flex',
         alignItems: 'center',
         padding: theme.spacing(5, 1),
         justifyContent: 'flex-start',

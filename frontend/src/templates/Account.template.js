@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
     },
     paper: {
         marginTop: 40,
-        padding: 8,
+        padding: theme.spacing(4),
         width: `50%`,
         marginLeft: `auto`,
         marginRight: `auto`,
@@ -188,9 +188,10 @@ export default function AccountTemplate(props) {
                                 />
                             </ListItem>
                         ))}
+                        {!props.state.blocked_sites.length && <p>No sites blocked</p>}
                         <TextField
                         id="new_domain"
-                        label="Add new domain"
+                        label="Add new domain to block tracking"
                         className={classes.textfield}
                         fullWidth
                         margin="dense"

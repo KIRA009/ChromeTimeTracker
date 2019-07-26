@@ -17,10 +17,17 @@ import requests from '../request'
 
 const useStyles = makeStyles(theme => ({
         paper: {
-            minWidth: `60%`,
+            width: `60%`,
             padding: theme.spacing(1, 2),
             marginLeft: `auto`,
             marginRight: `auto`,
+            marginBottom: 20,
+            [theme.breakpoints.down('sm')]: {
+                width: `80%`,
+            },
+            [theme.breakpoints.down('xs')]: {
+                width: `100%`,
+            }
         },
         sessionId: {
             fontSize: theme.typography.pxToRem(13),
@@ -103,7 +110,6 @@ export default function Sessionbar(props) {
         <Paper classes={{root: classes.paper}}>
             <Button variant="contained" color="secondary" className={classes.deleteButton} style={{display: (show ? `block` : `none`)}} onClick={del_domains}>Delete</Button>
             <Typography className={classes.sessionTime}>{session_info.start_time.toString().slice(0, 25) + ` to ` + session_info.end_time.toString().slice(0, 25)}</Typography>
-            <Typography className={classes.sessionId} gutterBottom>{id}</Typography>
             <Divider />
             <List ref={session_ref}>
                 {

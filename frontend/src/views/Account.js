@@ -13,16 +13,17 @@ export default class Account extends Component {
     }
     get_settings = () => {
         requests.get('/get-settings/')
-      .then(resp => {
-          const data = resp.data.data;
-          this.setState({
-              min_time: data.min_time,
-              blocked_sites: data.blocked_sites,
-              username: data.user.username,
-              email: data.user.email
-          })
-          requests.setToken(resp)
-      })
+        .then(resp => {
+            const data = resp.data.data;
+            this.setState({
+                min_time: data.min_time,
+                blocked_sites: data.blocked_sites,
+                username: data.user.username,
+                email: data.user.email
+            })
+            requests.setToken(resp)
+        })
+        .catch(err => requests.redirect())
     }
     onChange = evt => {
         this.setState({

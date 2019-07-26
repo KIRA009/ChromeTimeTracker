@@ -2,10 +2,11 @@ from flask import Blueprint, request
 import types
 from flask_cors import CORS
 from urllib.parse import urlparse
+from sqlalchemy import desc
 
 from app.helpers import error_response
 from app.response_modifiers import route, login_required
-from app.models import Domain
+from app.models import Session, Domain
 
 api = Blueprint('auth', __name__)
 api.before_request(login_required)
@@ -33,7 +34,7 @@ def get_details():
 @api.route('/get-sessions/', methods=['GET'])
 def get_session():
 	response = dict(sessions=list())
-	for session in request.user.sessions:
+	for session in sorted(request.user.sessions, key=lambda x: x.start_time, reverse=True):
 		response['sessions'].append({session.id: session.detail()})
 	return response
 
