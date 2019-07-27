@@ -51,7 +51,6 @@ export default class Session {
     get_session = () => {
         let session = JSON.parse(window.localStorage.getItem('session'));
         if (session) {
-            console.log('Here')
             this.session = session;
             this.session.tab_manager = new TabManager(this.session.tab_manager.tabs, 
                 this.session.tab_manager.discarded_tabs);
@@ -62,7 +61,7 @@ export default class Session {
 
     session_not_initialised = () => {
         try { return !this.session.id}
-        catch {true}
+        catch {return true}
     }
 
     start_new_tracking = (tabId) => {
@@ -111,8 +110,10 @@ export default class Session {
                 alert('Fail')
             }
         }
-        xhttp.open('POST', 'http://127.0.0.1:5000/save-sessions/')
-        xhttp.send(form_data);
+        try{
+            xhttp.open('POST', 'http://127.0.0.1:5000/save-sessions/')
+            xhttp.send(form_data);
+        } catch{}
     }
 
     set_token = token => window.localStorage.setItem('Token', token);

@@ -131,6 +131,20 @@ export default function AccountTemplate(props) {
         .catch(err => console.log(err.response.data.data))
         .then(() => props.rerender())
     }
+    const copyToken = evt => {
+        evt.persist()
+        requests.get('/get-token/')
+        .then(resp => {
+            let input = document.createElement('input');
+            input.value = resp.data.data.token;
+            document.body.append(input);
+            input.select();
+            document.execCommand('copy');
+            input.remove();
+            evt.target.innerHTML = 'Token copied to clipboard'
+            setTimeout(() => evt.target.innerHTML = 'Copy new token to clipboard', 2000)
+        })
+    }
     return (
         <div>
             <CssBaseline />
@@ -198,7 +212,8 @@ export default function AccountTemplate(props) {
                         inputRef={new_domain}
                         />
                         <strong><small ref={helper}></small></strong>
-                        <Button variant='contained' color='primary' className={classes.addButton} onClick={onAddClick}>Add</Button>
+                        <Button variant='contained' color='primary' className={classes.addButton} onClick={onAddClick}>Add</Button><br/>
+                        <Button variant='contained' color='primary' className={classes.addButton} onClick={evt => copyToken(evt)}>Copy new token to clipboard</Button>
                     </List>
                 </Paper>
             </main>

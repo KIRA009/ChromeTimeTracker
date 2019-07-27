@@ -6,13 +6,18 @@ from sqlalchemy import desc
 
 from app.helpers import error_response
 from app.response_modifiers import route, login_required
-from app.models import Session, Domain
+from app.models import User, Session, Domain
 
 api = Blueprint('auth', __name__)
 api.before_request(login_required)
 api.route = types.MethodType(route, api)
 
 CORS(api, resources='*', expose_headers=['Token'])
+
+
+@api.route('/get-token/', methods=['GET'])
+def get_token():
+	return dict(token=request.user.generate_auth_token(99999999999999))
 
 
 @api.route('/get-details/', methods=['GET'])

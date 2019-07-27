@@ -80,7 +80,7 @@ export default function Sessionbar(props) {
     const onChange = evt => {   
         let children = session_ref.current.children;
         setShow(false);
-        let length = document.querySelectorAll('input').length;
+        let length = session_ref.current.querySelectorAll('input').length;
         for (var ind=0; ind<length; ind++) {
             if (children[ind].querySelector('input[type="checkbox"]').checked) {
                 setShow(true);

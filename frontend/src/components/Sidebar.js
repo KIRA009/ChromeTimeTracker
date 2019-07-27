@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import urls from '../urls'
+import requests from '../request'
 import {
     Drawer,
     List,
@@ -45,9 +46,10 @@ export default function Sidebar(props) {
         {
             url: urls.history.url,
             name: 'History'
-        }
+        },
     ]
     const classes = useStyles();
+    const logout = () => requests.redirect();
     return (
         <Drawer
         className={classes.drawer}
@@ -72,6 +74,9 @@ export default function Sidebar(props) {
                         </ListItem>
                     </Link>
                 ))}
+                    <ListItem button>
+                        <ListItemText primary='Log out' onClick={logout}/>
+                    </ListItem>
                 </List>
             <Divider />
         </Drawer>
