@@ -1,8 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 
-// const useStyles = makeStyles()
-
 export default function Statusbars(props) {
     const domains = props.domains;
     let useStyles = {
@@ -30,9 +28,9 @@ export default function Statusbars(props) {
     if (domains.length === 0)
         return null
     return (
-        domains.map((domain, index) => (
+        domains.map((domain, index) => (index <= props.len) && (
             <div key={index} className={classes.status_div + ` ` + classes['div' + index]}>
-                { domain[1][0] }
+                { (index === props.len)? 'Others' : domain[1][0] }
             </div>
         ))
     )

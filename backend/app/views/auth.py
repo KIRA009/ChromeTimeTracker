@@ -47,8 +47,11 @@ def get_session():
 @api.route('/delete-domains/', methods=['POST'])
 def delete_domains():
 	domains = request.json['domains']
+	session = Domain.get(domains[0]).session
 	for domain in domains:
 		Domain.delete(domain)
+	if len(session.domains) == 0:
+		session.delete()
 	return dict()
 
 

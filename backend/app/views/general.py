@@ -17,15 +17,16 @@ def save_session():
 	user = User.check_auth_token(token)
 	if next(user):
 		user = next(user)
-		settings = User.get(username=user)
 		for session in sessions:
 			Session(dict(username=user, id=session['id'], start_time=session['start'], end_time=session['end']))
 			for _, tab_info in session['tab_manager']['tabs'].items():
 				url = tab_info['url']
 				title = tab_info['title']
 				favicon = tab_info['favIconUrl']
-				if url.startswith('chrome://'):
-					continue
+				try:
+					if url.startswith('chrome://'):
+						continue
+				except: print(tab_info)
 				for i in range(len(tab_info['active_start_times'])):
 					Domain(dict(session_id=session['id'], url=url, title=title, favicon=favicon,
 					            start_time=tab_info['active_start_times'][i], end_time=tab_info['active_end_times'][i]))
@@ -33,8 +34,10 @@ def save_session():
 				url = tab_info['url']
 				title = tab_info['title']
 				favicon = tab_info['favIconUrl']
-				if url.startswith('chrome://'):
-					continue
+				try:
+					if url.startswith('chrome://'):
+						continue
+				except: print(tab_info)
 				for i in range(len(tab_info['active_start_times'])):
 					Domain(dict(session_id=session['id'], url=url, title=title, favicon=favicon,
 					            start_time=tab_info['active_start_times'][i], end_time=tab_info['active_end_times'][i]))

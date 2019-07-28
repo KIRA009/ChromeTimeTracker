@@ -11,6 +11,9 @@ const styles = {
 }
 
 export default class Piechart extends Component {
+    state = {
+        len: 0
+    }
     draw_pie_chart = (ctx, data, total_time) => {
         let colors = this.props.state.colors;
         let rem_time = total_time;
@@ -29,7 +32,10 @@ export default class Piechart extends Component {
             ctx.closePath();
             rem_time -= time;
             if (over) {
-                break;
+                if (this.state.len === 0) {
+                    this.setState({len: parseInt(index, 10)})
+                }
+                break
             }
         }
     }
@@ -47,7 +53,7 @@ export default class Piechart extends Component {
                     <canvas ref='canvas'></canvas>
                 </Grid>
                 <Grid item xs={12} sm style={styles.statusbars}>
-                    <Statusbars domains={this.props.state.domains} colors={this.props.state.colors}/>
+                    <Statusbars domains={this.props.state.domains} colors={this.props.state.colors} len={this.state.len}/>
                 </Grid>
             </Grid>
         )

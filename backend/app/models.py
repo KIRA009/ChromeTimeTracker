@@ -80,7 +80,7 @@ class Session(db.Model):
 	id = db.Column(db.String(256), primary_key=True)
 	start_time = db.Column(db.DateTime)
 	end_time = db.Column(db.DateTime)
-	domains = db.relationship('Domain', backref='session', lazy='dynamic')
+	domains = db.relationship('Domain', backref='session', lazy=True)
 
 	def __init__(self, data):
 		data['start_time'] = cvt_date(data['start_time'])
@@ -97,6 +97,10 @@ class Session(db.Model):
 		del data['_sa_instance_state']
 		data['domains'] = [domain.detail() for domain in self.domains]
 		return data
+
+	def delete(self):
+		db.session.delete(self)
+		db.session.commit()
 
 
 class Domain(db.Model):
@@ -133,8 +137,12 @@ class Domain(db.Model):
 		return data
 
 	@staticmethod
+	def get(domain_id):
+		return Domain.query.filter_by(id=domain_id).first()
+
+	@staticmethod
 	def delete(domain_id):
-		domain = Domain.query.filter_by(id=domain_id).first()
+		domain = Domain.get(domain_id)
 		if domain:
 			db.session.delete(domain)
 			db.session.commit()
