@@ -109,7 +109,7 @@ export default function Sessionbar(props) {
     return (
         <Paper classes={{root: classes.paper}}>
             <Button variant="contained" color="secondary" className={classes.deleteButton} style={{display: (show ? `block` : `none`)}} onClick={del_domains}>Delete</Button>
-            <Typography className={classes.sessionTime}>{session_info.start_time.toString().slice(0, 25) + ` to ` + session_info.end_time.toString().slice(0, 25)}</Typography>
+            <Typography className={classes.sessionTime}>{session_info.start_time.toUTCString().slice(0, 25) + ` to ` + session_info.end_time.toUTCString().slice(0, 25)}</Typography>
             <Divider />
             <List ref={session_ref}>
                 {
@@ -121,7 +121,7 @@ export default function Sessionbar(props) {
                                 <FormControlLabel
                                 value="start"
                                 control={<Checkbox color="primary" inputProps={{id: domain.id}}/>}
-                                label={<ListItemText primary={<a href={domain.url} rel="noopener noreferrer" target='_blank'><img alt="favicon" src={domain.favicon} className={classes.icon} />{domain.title}</a>} secondary={domain.start_time.toString().slice(0, 24) + ` to ` + domain.end_time.toString().slice(0, 24)} />}
+                                label={<ListItemText primary={<a href={domain.url} rel="noopener noreferrer" target='_blank'><img alt="favicon" src={domain.favicon} className={classes.icon} />{domain.title}</a>} secondary={domain.start_time.toUTCString().slice(0, 25) + ` to ` + domain.end_time.toUTCString().slice(0, 25)} />}
                                 onChange={onChange}
                                 />
                                 </Grid>

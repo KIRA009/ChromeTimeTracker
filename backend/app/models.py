@@ -155,7 +155,7 @@ class Setting(db.Model):
 
 	@staticmethod
 	def create(username):
-		setting = Setting(username)
+		setting = Setting(user_id=username)
 		db.session.add(setting)
 		db.session.commit()
 

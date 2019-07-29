@@ -30,7 +30,7 @@ export default function Statusbars(props) {
     return (
         domains.map((domain, index) => (index <= props.len) && (
             <div key={index} className={classes.status_div + ` ` + classes['div' + index]}>
-                { (index === props.len)? 'Others' : domain[1][0] }
+                { (index === props.len && props.over)? 'Others' : domain[1][0] }
             </div>
         ))
     )

@@ -48,10 +48,10 @@ export default function HistoryTemplate(props) {
             })}
             >
                 <div className={classes.drawerHeader}>
-                {
+                {props.sessions.length !== 0  ? (
                     props.sessions.map((item, index) => (
                         <Sessionbar session={item} key={index} rerender={props.rerender}/>
-                    ))
+                    ))) : <p>No sessions recorded</p>
                 }
                 </div>
             </main>

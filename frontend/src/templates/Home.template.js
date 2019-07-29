@@ -37,7 +37,8 @@ const useStyles = makeStyles(theme => ({
     canvas: {
         marginTop: 90,
         marginLeft: `auto`,
-        marginRight: `auto`
+        marginRight: `auto`,
+        padding: 10,
     }
 }));
 

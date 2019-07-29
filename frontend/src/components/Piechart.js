@@ -11,33 +11,35 @@ const styles = {
 }
 
 export default class Piechart extends Component {
+    constructor(props) {
+        super(props);
+        this.over = false
+    }
     state = {
         len: 0
     }
     draw_pie_chart = (ctx, data, total_time) => {
         let colors = this.props.state.colors;
         let rem_time = total_time;
-        let over = false;
         for (var index in data) {
             let time = data[index][1][1]
             let rem_perc = rem_time / total_time;
             ctx.beginPath();
             ctx.moveTo(cx, cy);
             if (rem_perc <= 0.1)
-                over = true;
+                this.over = true;
             ctx.arc(cx, cy, rad, 0, get_rad(rem_perc));
             ctx.lineTo(cx, cy)
             ctx.fillStyle = colors[index];
             ctx.fill();
             ctx.closePath();
             rem_time -= time;
-            if (over) {
-                if (this.state.len === 0) {
-                    this.setState({len: parseInt(index, 10)})
-                }
+            if (this.over) {
                 break
             }
         }
+        if (this.state.len === 0)
+            this.setState({len: parseInt(index, 10)})
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         const ctx = this.refs.canvas.getContext('2d');
@@ -53,7 +55,7 @@ export default class Piechart extends Component {
                     <canvas ref='canvas'></canvas>
                 </Grid>
                 <Grid item xs={12} sm style={styles.statusbars}>
-                    <Statusbars domains={this.props.state.domains} colors={this.props.state.colors} len={this.state.len}/>
+                    <Statusbars domains={this.props.state.domains} colors={this.props.state.colors} len={this.state.len} over={this.over}/>
                 </Grid>
             </Grid>
         )
